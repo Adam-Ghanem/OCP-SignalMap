@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCP SignalMap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root { --bg:#07101f; --card:#0f1c2f; --line:#22334d; --text:#eef6ff; --muted:#9fb0c5; --green:#37d67a; --yellow:#f4c430; --blue:#2f80ed; --red:#ff4d4d; }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f7fb;color:#132033}
+    header{background:linear-gradient(135deg,#06111f,#102846);color:var(--text);padding:34px 20px}
+    .wrap{max-width:1180px;margin:auto}
+    .brand{display:flex;gap:18px;align-items:center}.logo{width:82px;height:82px;border-radius:20px;background:#fff;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+    .logo svg{width:68px;height:68px}.brand h1{margin:0;font-size:38px;letter-spacing:2px}.brand p{margin:8px 0 0;color:#b8c4d6;font-size:16px}
+    main{padding:22px 20px 40px}.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr auto auto;gap:12px;margin:20px 0;align-items:end}
+    label{font-weight:700;font-size:13px;color:#4f6075;display:block;margin-bottom:7px} input,select,button{width:100%;border:1px solid #d6deea;border-radius:12px;padding:12px;background:#fff;font-size:14px}
+    button{cursor:pointer;background:#0b7a3b;color:white;font-weight:800;border:none;white-space:nowrap}button.secondary{background:#1f4f87}button:hover{filter:brightness(1.05)}
+    .cards{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin:18px 0}.card{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:18px;box-shadow:0 8px 22px rgba(20,34,54,.06)}
+    .card small{display:block;color:#68778b;font-weight:800;letter-spacing:.5px;text-transform:uppercase}.card b{display:block;font-size:28px;margin-top:10px}.green{color:#0a8a45}.yellow{color:#a87d00}.blue{color:#1f6fe5}.red{color:#df2b2b}
+    #map{height:530px;border-radius:22px;border:1px solid #dce5f2;box-shadow:0 10px 28px rgba(20,34,54,.08);background:#dfe7f0}.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}.panel{background:white;border:1px solid #e2e8f0;border-radius:18px;padding:18px}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left}th{color:#53647a;background:#f7fafc}.badge{padding:4px 9px;border-radius:30px;font-weight:800;font-size:12px}.weak{background:#ffecec;color:#c62525}.good{background:#fff6d6;color:#8c6800}.excellent{background:#e9fbf0;color:#05783a}
+    .note{color:#617186;font-size:14px;line-height:1.55}.empty{padding:30px;text-align:center;color:#6a7b90}
+    @media(max-width:900px){.toolbar{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.brand h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap brand">
+    <div class="logo" aria-label="OCP SignalMap logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9be53b"/><stop offset="1" stop-color="#078939"/></linearGradient></defs>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="url(#g)" stroke-width="6" opacity=".8"/>
+        <path d="M50 12c16 0 29 13 29 29 0 22-29 47-29 47S21 63 21 41c0-16 13-29 29-29z" fill="url(#g)" stroke="#064d25" stroke-width="2"/>
+        <circle cx="50" cy="41" r="15" fill="#f8fff2" opacity=".9"/>
+        <path d="M50 24l5 12h13l-10 8 4 12-12-7-12 7 4-12-10-8h13z" fill="#80c41c" stroke="#064d25" stroke-width="1"/>
+        <text x="73" y="80" font-size="12" font-family="Arial" font-weight="700" fill="#0d722f">4G</text>
+      </svg>
+    </div>
+    <div>
+      <h1>OCP SignalMap</h1>
+      <p>Professional 4G coverage heatmap viewer and PDF reporting tool</p>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="toolbar">
+    <div><label>Upload CSV</label><input id="file" type="file" accept=".csv,text/csv" /></div>
+    <div><label>Technology</label><select id="technology"><option>4G</option><option>3G</option><option>5G</option></select></div>
+    <div><label>Metric</label><select id="metric"><option>RSRP</option><option>RSRQ</option><option>SINR</option><option>LA VITESSE</option></select></div>
+    <button id="sample" class="secondary">Load sample</button>
+    <button id="pdf">Download PDF Report</button>
+  </section>
+
+  <section class="cards">
+    <div class="card"><small>Total</small><b id="total">0</b></div>
+    <div class="card"><small>Weak</small><b id="weak" class="blue">0</b></div>
+    <div class="card"><small>Good</small><b id="good" class="yellow">0</b></div>
+    <div class="card"><small>Excellent</small><b id="excellent" class="green">0</b></div>
+    <div class="card"><small>Average</small><b id="avg">-</b></div>
+    <div class="card"><small>Best</small><b id="best" class="green">-</b></div>
+  </section>
+
+  <section class="grid">
+    <div id="map"></div>
+    <div class="panel">
+      <h2>Priority Weak Zones</h2>
+      <p class="note">Weak points are the first optimization priority. For RSRP, weak means below -105 dBm, good is -105 to -90 dBm, and excellent is -90 dBm or better.</p>
+      <div id="table" class="empty">Upload a CSV to show weakest points.</div>
+    </div>
+  </section>
+</main>
+<script>
+let rows = [];
+let map = L.map('map').setView([32.82, -6.83], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+let layer = L.layerGroup().addTo(map);
+
+const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g,'_');
+function splitCSVLine(line){ const out=[]; let cur='', q=false; for(let i=0;i<line.length;i++){ const c=line[i]; if(c==='"'){ q=!q; continue; } if(c===',' && !q){ out.push(cur); cur=''; } else cur+=c; } out.push(cur); return out.map(x=>x.trim()); }
+function parseCSV(text){ const lines=text.trim().split(/\r?\n/).filter(Boolean); if(!lines.length) return []; const headers=splitCSVLine(lines[0]); return lines.slice(1).map(line=>{ const values=splitCSVLine(line); const obj={}; headers.forEach((h,i)=>obj[h]=values[i]); return obj; }); }
+function findColumn(candidates, obj){ const keys=Object.keys(obj); for(const k of keys){ const nk=norm(k); if(candidates.some(c=>nk.includes(c))) return k; } return null; }
+function classify(metric, v){ if(metric==='RSRP') return v < -105 ? 'Weak' : v < -90 ? 'Good' : 'Excellent'; if(metric==='RSRQ') return v < -15 ? 'Weak' : v < -10 ? 'Good' : 'Excellent'; if(metric==='SINR') return v < 5 ? 'Weak' : v < 20 ? 'Good' : 'Excellent'; return v < 10 ? 'Weak' : v < 40 ? 'Good' : 'Excellent'; }
+function color(q){ return q==='Weak' ? '#2f80ed' : q==='Good' ? '#f4c430' : '#19c76f'; }
+function update(){
+  const metric=document.getElementById('metric').value; layer.clearLayers();
+  if(!rows.length){ return; }
+  const sample=rows[0]; const latCol=findColumn(['latitude','lat','gps_latitude'], sample); const lonCol=findColumn(['longitude','lon','lng','gps_longitude'], sample); const metCol=findColumn([norm(metric)], sample) || metric;
+  const valid=rows.map(r=>({ raw:r, lat:parseFloat(r[latCol]), lon:parseFloat(r[lonCol]), val:parseFloat(r[metCol]) })).filter(r=>Number.isFinite(r.lat)&&Number.isFinite(r.lon)&&Number.isFinite(r.val));
+  let weak=0, good=0, excellent=0, sum=0, best=null; const bounds=[];
+  valid.forEach(r=>{ const q=classify(metric,r.val); r.q=q; if(q==='Weak') weak++; else if(q==='Good') good++; else excellent++; sum+=r.val; if(best===null || (metric==='RSRP'||metric==='RSRQ' ? r.val>best : r.val>best)) best=r.val; bounds.push([r.lat,r.lon]); L.circleMarker([r.lat,r.lon],{radius:7,color:color(q),fillColor:color(q),fillOpacity:.72,weight:2}).bindPopup(`<b>${q}</b><br>${metric}: ${r.val}<br>${r.lat}, ${r.lon}`).addTo(layer); });
+  if(bounds.length) map.fitBounds(bounds,{padding:[25,25]});
+  document.getElementById('total').textContent=valid.length; document.getElementById('weak').textContent=weak; document.getElementById('good').textContent=good; document.getElementById('excellent').textContent=excellent;
+  document.getElementById('avg').textContent=valid.length ? (sum/valid.length).toFixed(1) : '-'; document.getElementById('best').textContent=best ?? '-';
+  const weakest=valid.slice().sort((a,b)=>a.val-b.val).slice(0,10);
+  document.getElementById('table').innerHTML = weakest.length ? `<table><thead><tr><th>#</th><th>Quality</th><th>${metric}</th><th>Latitude</th><th>Longitude</th><th>Map</th></tr></thead><tbody>${weakest.map((r,i)=>`<tr><td>${i+1}</td><td><span class="badge ${r.q.toLowerCase()}">${r.q}</span></td><td>${r.val}</td><td>${r.lat.toFixed(5)}</td><td>${r.lon.toFixed(5)}</td><td><a href="https://maps.google.com/?q=${r.lat},${r.lon}" target="_blank">Open</a></td></tr>`).join('')}</tbody></table>` : '<div class="empty">No valid points found.</div>';
+}
+document.getElementById('file').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ rows=parseCSV(reader.result); update(); }; reader.readAsText(f); });
+document.getElementById('metric').addEventListener('change', update);
+document.getElementById('sample').addEventListener('click', async()=>{ const r=await fetch('sample_data/test_4g_heatmap_sample.csv'); rows=parseCSV(await r.text()); update(); });
+document.getElementById('pdf').addEventListener('click',()=>{ const { jsPDF } = window.jspdf; const doc=new jsPDF(); const metric=document.getElementById('metric').value; doc.setFontSize(20); doc.text('OCP SignalMap Report', 14, 18); doc.setFontSize(11); doc.text('Professional 4G Coverage Quality Analysis', 14, 27); doc.text(`Metric: ${metric}`, 14, 42); doc.text(`Total measurements: ${document.getElementById('total').textContent}`, 14, 52); doc.text(`Weak zones: ${document.getElementById('weak').textContent}`, 14, 62); doc.text(`Good zones: ${document.getElementById('good').textContent}`, 14, 72); doc.text(`Excellent zones: ${document.getElementById('excellent').textContent}`, 14, 82); doc.text(`Average: ${document.getElementById('avg').textContent}`, 14, 92); doc.text(`Best: ${document.getElementById('best').textContent}`, 14, 102); doc.save('ocp_signalmap_report.pdf'); });
+</script>
+</body>
+</html>
