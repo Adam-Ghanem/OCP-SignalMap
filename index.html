@@ -40,7 +40,7 @@
     </div>
     <div>
       <h1>OCP SignalMap</h1>
-      <p>Professional 4G coverage heatmap viewer and PDF reporting tool</p>
+      <p>4G coverage map viewer and PDF reporting tool</p>
     </div>
   </div>
 </header>
@@ -55,7 +55,7 @@
 
   <section class="cards">
     <div class="card"><small>Total</small><b id="total">0</b></div>
-    <div class="card"><small>Weak</small><b id="weak" class="blue">0</b></div>
+    <div class="card"><small>Weak</small><b id="weak" class="red">0</b></div>
     <div class="card"><small>Good</small><b id="good" class="yellow">0</b></div>
     <div class="card"><small>Excellent</small><b id="excellent" class="green">0</b></div>
     <div class="card"><small>Average</small><b id="avg">-</b></div>
@@ -72,34 +72,237 @@
   </section>
 </main>
 <script>
-let rows = [];
-let map = L.map('map').setView([32.82, -6.83], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
-let layer = L.layerGroup().addTo(map);
+const map = L.map('map').setView([32.82, -6.83], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap'
+}).addTo(map);
 
-const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g,'_');
-function splitCSVLine(line){ const out=[]; let cur='', q=false; for(let i=0;i<line.length;i++){ const c=line[i]; if(c==='"'){ q=!q; continue; } if(c===',' && !q){ out.push(cur); cur=''; } else cur+=c; } out.push(cur); return out.map(x=>x.trim()); }
-function parseCSV(text){ const lines=text.trim().split(/\r?\n/).filter(Boolean); if(!lines.length) return []; const headers=splitCSVLine(lines[0]); return lines.slice(1).map(line=>{ const values=splitCSVLine(line); const obj={}; headers.forEach((h,i)=>obj[h]=values[i]); return obj; }); }
-function findColumn(candidates, obj){ const keys=Object.keys(obj); for(const k of keys){ const nk=norm(k); if(candidates.some(c=>nk.includes(c))) return k; } return null; }
-function classify(metric, v){ if(metric==='RSRP') return v < -105 ? 'Weak' : v < -90 ? 'Good' : 'Excellent'; if(metric==='RSRQ') return v < -15 ? 'Weak' : v < -10 ? 'Good' : 'Excellent'; if(metric==='SINR') return v < 5 ? 'Weak' : v < 20 ? 'Good' : 'Excellent'; return v < 10 ? 'Weak' : v < 40 ? 'Good' : 'Excellent'; }
-function color(q){ return q==='Weak' ? '#2f80ed' : q==='Good' ? '#f4c430' : '#19c76f'; }
-function update(){
-  const metric=document.getElementById('metric').value; layer.clearLayers();
-  if(!rows.length){ return; }
-  const sample=rows[0]; const latCol=findColumn(['latitude','lat','gps_latitude'], sample); const lonCol=findColumn(['longitude','lon','lng','gps_longitude'], sample); const metCol=findColumn([norm(metric)], sample) || metric;
-  const valid=rows.map(r=>({ raw:r, lat:parseFloat(r[latCol]), lon:parseFloat(r[lonCol]), val:parseFloat(r[metCol]) })).filter(r=>Number.isFinite(r.lat)&&Number.isFinite(r.lon)&&Number.isFinite(r.val));
-  let weak=0, good=0, excellent=0, sum=0, best=null; const bounds=[];
-  valid.forEach(r=>{ const q=classify(metric,r.val); r.q=q; if(q==='Weak') weak++; else if(q==='Good') good++; else excellent++; sum+=r.val; if(best===null || (metric==='RSRP'||metric==='RSRQ' ? r.val>best : r.val>best)) best=r.val; bounds.push([r.lat,r.lon]); L.circleMarker([r.lat,r.lon],{radius:7,color:color(q),fillColor:color(q),fillOpacity:.72,weight:2}).bindPopup(`<b>${q}</b><br>${metric}: ${r.val}<br>${r.lat}, ${r.lon}`).addTo(layer); });
-  if(bounds.length) map.fitBounds(bounds,{padding:[25,25]});
-  document.getElementById('total').textContent=valid.length; document.getElementById('weak').textContent=weak; document.getElementById('good').textContent=good; document.getElementById('excellent').textContent=excellent;
-  document.getElementById('avg').textContent=valid.length ? (sum/valid.length).toFixed(1) : '-'; document.getElementById('best').textContent=best ?? '-';
-  const weakest=valid.slice().sort((a,b)=>a.val-b.val).slice(0,10);
-  document.getElementById('table').innerHTML = weakest.length ? `<table><thead><tr><th>#</th><th>Quality</th><th>${metric}</th><th>Latitude</th><th>Longitude</th><th>Map</th></tr></thead><tbody>${weakest.map((r,i)=>`<tr><td>${i+1}</td><td><span class="badge ${r.q.toLowerCase()}">${r.q}</span></td><td>${r.val}</td><td>${r.lat.toFixed(5)}</td><td>${r.lon.toFixed(5)}</td><td><a href="https://maps.google.com/?q=${r.lat},${r.lon}" target="_blank">Open</a></td></tr>`).join('')}</tbody></table>` : '<div class="empty">No valid points found.</div>';
+const markerLayer = L.layerGroup().addTo(map);
+let rows = [];
+
+const normalize = value => String(value ?? '')
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, '_');
+
+function parseCSV(text) {
+  const records = [];
+  let record = [];
+  let field = '';
+  let quoted = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+
+    if (quoted) {
+      if (character === '"' && text[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else if (character === '"') {
+        quoted = false;
+      } else {
+        field += character;
+      }
+      continue;
+    }
+
+    if (character === '"') {
+      quoted = true;
+    } else if (character === ',') {
+      record.push(field.trim());
+      field = '';
+    } else if (character === '\n') {
+      record.push(field.trim());
+      if (record.some(value => value !== '')) records.push(record);
+      record = [];
+      field = '';
+    } else if (character !== '\r') {
+      field += character;
+    }
+  }
+
+  record.push(field.trim());
+  if (record.some(value => value !== '')) records.push(record);
+  if (records.length < 2) return [];
+
+  const headers = records[0];
+  return records.slice(1).map(values => {
+    const item = {};
+    headers.forEach((header, index) => {
+      item[header] = values[index] ?? '';
+    });
+    return item;
+  });
 }
-document.getElementById('file').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ rows=parseCSV(reader.result); update(); }; reader.readAsText(f); });
+
+function findColumn(candidates, item) {
+  const normalizedCandidates = candidates.map(normalize);
+  const keys = Object.keys(item);
+  return keys.find(key => normalizedCandidates.includes(normalize(key)))
+    ?? keys.find(key => normalizedCandidates.some(candidate => normalize(key).includes(candidate)))
+    ?? null;
+}
+
+function classify(metric, value) {
+  if (metric === 'RSRP') return value < -105 ? 'Weak' : value < -90 ? 'Good' : 'Excellent';
+  if (metric === 'RSRQ') return value < -15 ? 'Weak' : value < -10 ? 'Good' : 'Excellent';
+  if (metric === 'SINR') return value < 5 ? 'Weak' : value < 20 ? 'Good' : 'Excellent';
+  return value < 10 ? 'Weak' : value < 40 ? 'Good' : 'Excellent';
+}
+
+function qualityColor(quality) {
+  if (quality === 'Weak') return '#df2b2b';
+  if (quality === 'Good') return '#f4c430';
+  return '#19c76f';
+}
+
+function resetSummary() {
+  for (const id of ['total', 'weak', 'good', 'excellent']) {
+    document.getElementById(id).textContent = '0';
+  }
+  document.getElementById('avg').textContent = '-';
+  document.getElementById('best').textContent = '-';
+}
+
+function update() {
+  const metric = document.getElementById('metric').value;
+  const technology = document.getElementById('technology').value;
+  markerLayer.clearLayers();
+  resetSummary();
+
+  if (!rows.length) return;
+
+  const sample = rows[0];
+  const latitudeColumn = findColumn(['latitude', 'lat', 'gps_latitude'], sample);
+  const longitudeColumn = findColumn(['longitude', 'lon', 'lng', 'gps_longitude'], sample);
+  const metricColumn = findColumn([metric], sample);
+  const technologyColumn = findColumn(
+    ['la_technologie', 'technology', 'technologie', 'network_type'],
+    sample
+  );
+
+  if (!latitudeColumn || !longitudeColumn || !metricColumn) {
+    document.getElementById('table').innerHTML =
+      '<div class="empty">The CSV is missing latitude, longitude, or the selected metric column.</div>';
+    return;
+  }
+
+  const filteredRows = technologyColumn
+    ? rows.filter(row => normalize(row[technologyColumn]) === normalize(technology))
+    : rows;
+
+  const validRows = filteredRows
+    .map(row => ({
+      latitude: Number.parseFloat(row[latitudeColumn]),
+      longitude: Number.parseFloat(row[longitudeColumn]),
+      value: Number.parseFloat(row[metricColumn])
+    }))
+    .filter(row => (
+      Number.isFinite(row.latitude)
+      && Number.isFinite(row.longitude)
+      && Number.isFinite(row.value)
+    ));
+
+  let weak = 0;
+  let good = 0;
+  let excellent = 0;
+  let sum = 0;
+  let best = null;
+  const bounds = [];
+
+  validRows.forEach(row => {
+    row.quality = classify(metric, row.value);
+    if (row.quality === 'Weak') weak += 1;
+    else if (row.quality === 'Good') good += 1;
+    else excellent += 1;
+
+    sum += row.value;
+    if (best === null || row.value > best) best = row.value;
+    bounds.push([row.latitude, row.longitude]);
+
+    const color = qualityColor(row.quality);
+    L.circleMarker([row.latitude, row.longitude], {
+      radius: 7,
+      color,
+      fillColor: color,
+      fillOpacity: 0.72,
+      weight: 2
+    })
+      .bindPopup(
+        `<b>${row.quality}</b><br>${metric}: ${row.value}<br>${row.latitude}, ${row.longitude}`
+      )
+      .addTo(markerLayer);
+  });
+
+  if (bounds.length) map.fitBounds(bounds, { padding: [25, 25] });
+
+  document.getElementById('total').textContent = validRows.length;
+  document.getElementById('weak').textContent = weak;
+  document.getElementById('good').textContent = good;
+  document.getElementById('excellent').textContent = excellent;
+  document.getElementById('avg').textContent = validRows.length
+    ? (sum / validRows.length).toFixed(1)
+    : '-';
+  document.getElementById('best').textContent = best ?? '-';
+
+  const weakest = validRows.slice().sort((left, right) => left.value - right.value).slice(0, 10);
+  document.getElementById('table').innerHTML = weakest.length
+    ? `<table><thead><tr><th>#</th><th>Quality</th><th>${metric}</th><th>Latitude</th><th>Longitude</th><th>Map</th></tr></thead><tbody>${weakest.map((row, index) => `<tr><td>${index + 1}</td><td><span class="badge ${row.quality.toLowerCase()}">${row.quality}</span></td><td>${row.value}</td><td>${row.latitude.toFixed(5)}</td><td>${row.longitude.toFixed(5)}</td><td><a href="https://maps.google.com/?q=${row.latitude},${row.longitude}" target="_blank" rel="noopener noreferrer">Open</a></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No valid points match the selected technology and metric.</div>';
+}
+
+document.getElementById('file').addEventListener('change', event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    rows = parseCSV(String(reader.result));
+    update();
+  };
+  reader.readAsText(file);
+});
+
 document.getElementById('metric').addEventListener('change', update);
-document.getElementById('sample').addEventListener('click', async()=>{ const r=await fetch('sample_data/test_4g_heatmap_sample.csv'); rows=parseCSV(await r.text()); update(); });
-document.getElementById('pdf').addEventListener('click',()=>{ const { jsPDF } = window.jspdf; const doc=new jsPDF(); const metric=document.getElementById('metric').value; doc.setFontSize(20); doc.text('OCP SignalMap Report', 14, 18); doc.setFontSize(11); doc.text('Professional 4G Coverage Quality Analysis', 14, 27); doc.text(`Metric: ${metric}`, 14, 42); doc.text(`Total measurements: ${document.getElementById('total').textContent}`, 14, 52); doc.text(`Weak zones: ${document.getElementById('weak').textContent}`, 14, 62); doc.text(`Good zones: ${document.getElementById('good').textContent}`, 14, 72); doc.text(`Excellent zones: ${document.getElementById('excellent').textContent}`, 14, 82); doc.text(`Average: ${document.getElementById('avg').textContent}`, 14, 92); doc.text(`Best: ${document.getElementById('best').textContent}`, 14, 102); doc.save('ocp_signalmap_report.pdf'); });
+document.getElementById('technology').addEventListener('change', update);
+
+document.getElementById('sample').addEventListener('click', async () => {
+  try {
+    const response = await fetch('sample_data/test_4g_heatmap_sample.csv');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    rows = parseCSV(await response.text());
+    update();
+  } catch (error) {
+    document.getElementById('table').innerHTML =
+      '<div class="empty">Unable to load the sample. Start the app with <code>python -m http.server 8000</code>.</div>';
+  }
+});
+
+document.getElementById('pdf').addEventListener('click', () => {
+  const total = Number.parseInt(document.getElementById('total').textContent, 10);
+  if (!total) {
+    window.alert('Load a CSV with valid measurements before exporting a report.');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const metric = document.getElementById('metric').value;
+  const technology = document.getElementById('technology').value;
+  doc.setFontSize(20);
+  doc.text('OCP SignalMap Report', 14, 18);
+  doc.setFontSize(11);
+  doc.text('Coverage Quality Analysis', 14, 27);
+  doc.text(`Technology: ${technology}`, 14, 38);
+  doc.text(`Metric: ${metric}`, 14, 48);
+  doc.text(`Total measurements: ${total}`, 14, 58);
+  doc.text(`Weak zones: ${document.getElementById('weak').textContent}`, 14, 68);
+  doc.text(`Good zones: ${document.getElementById('good').textContent}`, 14, 78);
+  doc.text(`Excellent zones: ${document.getElementById('excellent').textContent}`, 14, 88);
+  doc.text(`Average: ${document.getElementById('avg').textContent}`, 14, 98);
+  doc.text(`Best: ${document.getElementById('best').textContent}`, 14, 108);
+  doc.save('ocp_signalmap_report.pdf');
+});
 </script>
 </body>
 </html>

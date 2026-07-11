@@ -1,6 +1,6 @@
 # OCP SignalMap
 
-Professional 4G coverage map viewer and PDF reporting tool.
+Static 4G coverage map viewer and PDF reporting tool.
 
 ## What it does
 
@@ -19,13 +19,19 @@ OCP SignalMap is a static browser application for visualizing 4G coverage measur
 
 ## How to run
 
-1. Open `index.html` with Google Chrome.
-2. Keep internet enabled because the app loads map tiles and browser libraries from CDNs.
-3. Click **Upload CSV** or **Load sample**.
-4. Choose:
+1. Start a small local server from the repository directory:
+
+   ```bash
+   python -m http.server 8000
+   ```
+
+2. Open `http://localhost:8000` in a browser.
+3. Keep internet enabled because the app loads map tiles and browser libraries from CDNs.
+4. Click **Upload CSV** or **Load sample**.
+5. Choose:
    - Technology: `4G`
    - Metric: `RSRP`
-5. Use **Download PDF Report** to export a basic report.
+6. Use **Download PDF Report** to export a basic report.
 
 ## Expected CSV columns
 
@@ -60,4 +66,4 @@ For RSRP:
 
 ## Notes
 
-This is a static browser application. No Python, Streamlit, or server is required.
+This is a static browser application. Python is used only as a convenient local file server so the bundled sample CSV can be fetched reliably. Uploaded CSV files are processed in the browser and are not sent to a backend.
