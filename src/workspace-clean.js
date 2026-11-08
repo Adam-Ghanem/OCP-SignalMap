@@ -133,7 +133,14 @@
       const next=arr[(idx+(e.key==='ArrowRight'?1:arr.length-1))%arr.length];
       e.preventDefault();next.focus();next.click();
     });
-    window.SignalMapCleanUI={showGroup,groupForTab,version:'clean-v17'};
+    window.SignalMapCleanUI={showGroup,groupForTab,version:'clean-v18'};
+    // Progressive measurement workspace: keep the original table and data handlers intact.
+    if (!document.getElementById('smMeasurementsPlugin')) {
+      const plugin=document.createElement('script');
+      plugin.id='smMeasurementsPlugin';
+      plugin.src='./src/measurements-panel.js';
+      document.body.appendChild(plugin);
+    }
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
