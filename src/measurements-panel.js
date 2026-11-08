@@ -81,7 +81,7 @@
     function csvText(value, forceText=false) {
       const raw=String(value??'');
       // Guard spreadsheet viewers against formula injection from imported free-text columns.
-      const safe=forceText && /^[\\s]*[=+@\\-]/.test(raw) ? "'"+raw : raw;
+      const safe=forceText && /^\s*[=+@-]/.test(raw) ? "'"+raw : raw;
       return '"'+safe.replace(/"/g,'""')+'"';
     }
     exportButton.addEventListener('click',()=>{
@@ -97,7 +97,7 @@
           csvText(details.quality,true),csvText(details.location,true)
         ].join(','));
       });
-      const blob=new Blob(['\\uFEFF'+lines.join('\\r\\n')],{type:'text/csv;charset=utf-8;'});
+      const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
       const url=URL.createObjectURL(blob);
       const a=document.createElement('a');
       a.href=url;a.download='SignalMap_measurements_filtered.csv';
