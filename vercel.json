@@ -2,6 +2,10 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/3d",
+      "destination": "/experimental/OCP_SignalMap_Real_Terrain_3D_Public_Antennas.html"
+    },
+    {
       "source": "/OCP_SignalMap.html",
       "destination": "/index.html"
     }
@@ -37,6 +41,58 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/3d",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com; connect-src 'self' https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com https://overpass.kumi.systems https://overpass-api.de https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; worker-src 'self' blob:; media-src 'none'; frame-src 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/experimental/OCP_SignalMap_Real_Terrain_3D_Public_Antennas.html",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com; connect-src 'self' https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com https://overpass.kumi.systems https://overpass-api.de https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; worker-src 'self' blob:; media-src 'none'; frame-src 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com; connect-src 'self' https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com https://overpass.kumi.systems https://overpass-api.de https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; worker-src 'self' blob:; media-src 'none'; frame-src 'none'"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com; connect-src 'self' https://server.arcgisonline.com https://basemaps.cartocdn.com https://s3.amazonaws.com https://overpass.kumi.systems https://overpass-api.de https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; worker-src 'self' blob:; media-src 'none'; frame-src 'none'"
         },
         {
           "key": "Cache-Control",
