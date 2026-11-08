@@ -1,0 +1,122 @@
+[
+  {
+    "package": "@babel/runtime",
+    "version": "7.29.10",
+    "license": "MIT"
+  },
+  {
+    "package": "@types/raf",
+    "version": "3.4.3",
+    "license": "MIT"
+  },
+  {
+    "package": "atob",
+    "version": "2.1.2",
+    "license": "(MIT OR Apache-2.0)"
+  },
+  {
+    "package": "base64-arraybuffer",
+    "version": "1.0.2",
+    "license": "MIT"
+  },
+  {
+    "package": "btoa",
+    "version": "1.2.1",
+    "license": "(MIT OR Apache-2.0)"
+  },
+  {
+    "package": "canvg",
+    "version": "3.0.11",
+    "license": "MIT"
+  },
+  {
+    "package": "core-js",
+    "version": "3.51.0",
+    "license": "MIT"
+  },
+  {
+    "package": "css-line-break",
+    "version": "2.1.0",
+    "license": "MIT"
+  },
+  {
+    "package": "dompurify",
+    "version": "2.5.9",
+    "license": "(MPL-2.0 OR Apache-2.0)"
+  },
+  {
+    "package": "fflate",
+    "version": "0.4.9",
+    "license": "MIT"
+  },
+  {
+    "package": "html2canvas",
+    "version": "1.4.1",
+    "license": "MIT"
+  },
+  {
+    "package": "jspdf",
+    "version": "2.5.1",
+    "license": "MIT"
+  },
+  {
+    "package": "leaflet",
+    "version": "1.9.4",
+    "license": "BSD-2-Clause"
+  },
+  {
+    "package": "leaflet.heat",
+    "version": "0.2.0",
+    "license": null
+  },
+  {
+    "package": "papaparse",
+    "version": "5.4.1",
+    "license": "MIT"
+  },
+  {
+    "package": "performance-now",
+    "version": "2.1.0",
+    "license": "MIT"
+  },
+  {
+    "package": "raf",
+    "version": "3.4.1",
+    "license": "MIT"
+  },
+  {
+    "package": "regenerator-runtime",
+    "version": "0.13.11",
+    "license": "MIT"
+  },
+  {
+    "package": "rgbcolor",
+    "version": "1.0.1",
+    "license": "MIT OR SEE LICENSE IN FEEL-FREE.md"
+  },
+  {
+    "package": "stackblur-canvas",
+    "version": "2.7.0",
+    "license": "MIT"
+  },
+  {
+    "package": "svg-pathdata",
+    "version": "6.0.3",
+    "license": "MIT"
+  },
+  {
+    "package": "text-segmentation",
+    "version": "1.0.3",
+    "license": "MIT"
+  },
+  {
+    "package": "three",
+    "version": "0.180.0",
+    "license": "MIT"
+  },
+  {
+    "package": "utrie",
+    "version": "1.0.2",
+    "license": "MIT"
+  }
+]

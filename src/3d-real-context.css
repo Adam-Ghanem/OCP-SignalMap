@@ -1,0 +1,4 @@
+#smrealMap .sm3d-context-status{position:absolute;z-index:8;left:13px;bottom:15px;max-width:min(445px,75%);pointer-events:none;background:rgba(250,252,248,.94);color:#285640;border:1px solid #b4d1bd;box-shadow:0 4px 16px #143c2d22;border-radius:9px;padding:8px 12px;font:600 11px/1.5 system-ui;backdrop-filter:blur(6px)}
+#smrealMap .sm3d-context-status[data-phase="error"]{color:#974332;background:#fff8f2f0;border-color:#edd3c7}
+#smrealMap .sm3d-context-status[data-phase="loading"]{color:#577666}
+@media(max-width:760px){#smrealMap .sm3d-context-status{left:8px;bottom:8px;padding:6px 8px;font-size:10px;max-width:75%}}

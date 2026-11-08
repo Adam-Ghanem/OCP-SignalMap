@@ -1,0 +1,80 @@
+/* SignalMap Clean Workspace · Presentation-only upgrade (does not replace existing workflows) */
+:root { --sm-clean-border:#d9e8de; --sm-clean-shadow:0 12px 40px rgba(25,72,50,.09); --sm-clean-ink:#17412e; }
+.sm-clean .app-header { background:rgba(250,253,249,.98); border-bottom:1px solid var(--sm-clean-border); }
+.sm-clean .nav-item { border-radius:8px 8px 0 0; transition:background .16s,color .16s; }
+.sm-clean .nav-item:hover { background:#eef7f1; }
+.sm-clean .nav-item:focus-visible, .sm-clean .sm-clean-category:focus-visible,
+.sm-clean .sm-clean-quick-group summary:focus-visible {outline:3px solid rgba(6,140,95,.45);outline-offset:2px;}
+.sm-clean .map-stage { background:#f2f7f1; }
+.sm-clean .filter-panel { border:1px solid var(--sm-clean-border);border-radius:13px;
+  box-shadow:var(--sm-clean-shadow);background:rgba(255,255,255,.96); }
+.sm-clean .panel-section { border-color:#e2ede4; }
+.sm-clean .smx-field-section { padding-bottom:10px; }
+.sm-clean .smx-field-section .section-heading { padding-bottom:10px; }
+.sm-clean .smx-field-section .section-heading h2 {color:var(--sm-clean-ink);}
+.sm-clean .smx-field-section .smx-action-list.sm-clean-action-list { display:grid;grid-template-columns:minmax(0,1fr);gap:7px; }
+.sm-clean .sm-clean-quick-group {border:1px solid #deebe0;border-radius:10px;background:#f8fbf8;min-width:0;overflow:hidden;}
+.sm-clean .sm-clean-quick-group[open] { background:#fff;border-color:#c5ddcf;box-shadow:0 5px 14px rgba(17,83,51,.06); }
+.sm-clean .sm-clean-quick-group summary {cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  gap:8px;padding:12px 11px;color:#24583e;font-size:12px;font-weight:700;list-style:none;}
+.sm-clean .sm-clean-quick-group summary::-webkit-details-marker {display:none;}
+.sm-clean .sm-clean-quick-group summary:before {content:'›';font-size:19px;font-weight:500;line-height:10px;transition:transform .18s;}
+.sm-clean .sm-clean-quick-group[open] summary:before {transform:rotate(90deg);}
+.sm-clean .sm-clean-count {font-size:10px;border-radius:20px;background:#e5f2e8;padding:3px 8px;color:#3c7054;margin-left:auto;}
+.sm-clean .sm-clean-quick-items {border-top:1px solid #e7eee7;display:grid;gap:4px;padding:7px;}
+.sm-clean .sm-clean-quick-items .smx-action {min-height:34px;font-size:11px;padding:8px 9px;
+  border-color:transparent;background:transparent;box-shadow:none;border-radius:7px;}
+.sm-clean .sm-clean-quick-items .smx-action:hover {background:#eaf5ed;border-color:#d0e7d7;transform:none;}
+.sm-clean .sm-clean-quick-items .smx-mini {font-size:10px;}
+.sm-clean .data-dock { border-color:#d8e6db;background:#fff;grid-template-rows:81px minmax(0,1fr) 34px;
+  box-shadow:0 -5px 25px rgba(28,73,48,.055); }
+.sm-clean .dock-toolbar.sm-clean-toolbar { display:flex; flex-direction:column;align-items:stretch;justify-content:stretch;
+  gap:0;padding:0 13px;background:#fbfdfb;border-bottom:1px solid #dce9df;z-index:2; }
+.sm-clean .sm-clean-categories { display:flex;gap:5px;align-items:center;overflow-x:auto;min-height:36px;padding:2px 2px 0;
+  border-bottom:1px solid #e5ede6;scrollbar-width:thin; }
+.sm-clean .sm-clean-category {flex:none;border:1px solid transparent;background:transparent;color:#5b7162;
+  border-radius:7px 7px 0 0;padding:7px 12px;white-space:nowrap;font-weight:650;font-size:11px;}
+.sm-clean .sm-clean-category:hover {color:#1d6445;background:#eef6ef;}
+.sm-clean .sm-clean-category[aria-pressed="true"] {background:#e8f4eb;border-color:#d2e5d8;color:#006f4d;}
+.sm-clean .sm-clean-tools-row {display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;min-height:43px;}
+.sm-clean .dock-tabs {min-width:0;overflow-x:auto;flex:1;gap:6px;align-items:stretch;scrollbar-width:thin;}
+.sm-clean .dock-tabs button { flex:0 0 auto;font-size:11px;font-weight:600;padding:0 9px;}
+.sm-clean .dock-tabs button[hidden] {display:none !important;}
+.sm-clean .dock-tabs button.active,.sm-clean .dock-tabs button[aria-selected="true"] {color:#00754f; border-color:#00845e;}
+.sm-clean .table-controls[hidden] {display:none !important;}
+.sm-clean .table-controls {flex:0 1 auto;min-width:0;gap:6px;}
+.sm-clean .table-controls input {max-width:190px;}
+.sm-clean .data-dock [role="tabpanel"]:not([hidden]) {overflow:auto;min-width:0;min-height:0;}
+.sm-clean .data-dock [role="tabpanel"][hidden] {display:none !important;}
+.sm-clean #smrealSection, .sm-clean #sm3Section, .sm-clean #networkPanel {border-radius:13px;border-color:#d7e7db;}
+.sm-clean #sm3Section button,.sm-clean #smrealSection button {transition:filter .15s,background .15s;}
+.sm-clean #sm3Section button:hover:not(:disabled),.sm-clean #smrealSection button:hover:not(:disabled) {filter:brightness(.96);}
+.sm-clean .sm-clean-terrain-note,.sm-clean .sm-clean-provenance {padding:11px 14px;margin:0;
+  border-bottom:1px solid #dce9df;background:#f2faf4;color:#395e48;font-size:11px;line-height:1.55;}
+.sm-clean .sm-clean-provenance {border:1px solid #dce9df;border-radius:9px;margin:8px 0 14px;}
+.sm-clean :is(input,select,button):focus-visible {outline:2px solid #168761;outline-offset:2px;}
+.sm-clean .smx-panel .smx-head {gap:14px;}
+.sm-clean .smx-panel .smx-controls {flex-wrap:wrap;}
+.sm-clean .smx-panel .smx-stats {min-width:0;}
+.sm-clean .dock-footer {padding:0 16px;}
+.sm-clean .dock-plant {opacity:.11;pointer-events:none;}
+.sm-clean .filter-panel::before,.sm-clean .filter-panel::after {opacity:.32;pointer-events:none;}
+@media (min-width:1001px) {
+  body.sm-clean {grid-template-rows:54px 46px minmax(285px,1fr) 325px;}
+}
+@media (min-width:761px) and (max-width:1000px){
+  body.sm-clean {grid-template-rows:54px 44px minmax(315px,1fr) 315px;}
+}
+@media (max-width:760px) {
+  .sm-clean .data-dock {grid-template-rows:85px minmax(270px,auto) 38px;}
+  .sm-clean .sm-clean-categories {padding-inline:0;}
+  .sm-clean .sm-clean-category {padding:8px 9px;}
+  .sm-clean .sm-clean-tools-row {flex-wrap:nowrap;min-height:46px;}
+  .sm-clean .dock-tabs {max-width:100%;}
+  .sm-clean .table-controls {display:none !important;}
+  .sm-clean .smx-field-section .sm-clean-quick-group {max-width:100%;}
+  .sm-clean .sm-clean-terrain-note {padding:10px;}
+}
+@media (prefers-reduced-motion:reduce) {
+ .sm-clean * {scroll-behavior:auto !important;animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}

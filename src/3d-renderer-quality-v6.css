@@ -1,0 +1,7 @@
+/* 3D legibility tune-up only — no layout, RF, or report changes. */
+#smrealMap .network-tower-label{background:linear-gradient(160deg,rgba(253,255,252,.98),rgba(232,248,238,.97));border-width:2px;border-radius:9px;color:#123929;box-shadow:0 4px 15px #071c1a80,0 1px 2px #0a2224a3;backdrop-filter:blur(9px);letter-spacing:.01em;text-shadow:0 1px #ffffff7a}
+#smrealMap .network-tower-label b{font-size:12px;font-weight:850;letter-spacing:.035em}
+#smrealMap .network-tower-label span{font-size:10px;color:#285e49}
+#smrealMap .network-tower-label small{color:#627b6e;font-size:9px}
+#smrealMap .network-tower-label.sm3d-selected{box-shadow:0 0 0 5px #ffdb6c65,0 5px 25px #071c1b91}
+@media(prefers-reduced-motion:reduce){#smrealMap .network-tower-label{transition:none!important;animation:none!important}}

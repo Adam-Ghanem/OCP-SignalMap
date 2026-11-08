@@ -1,0 +1,33 @@
+/* Network Cinema Studio V4 — exclusively the 3D module. */
+#sm3dCinema{display:flex;flex-direction:column;gap:10px;border:1px solid #a8cdb5;border-radius:13px;background:linear-gradient(150deg,#f7fdf8,#e2f1e9);padding:12px;color:#234c3a;font:12px/1.48 system-ui}
+#sm3dCinema .s4heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#sm3dCinema .s4heading b{font-size:12px;letter-spacing:.08em;color:#096e51}
+#sm3dCinema .s4heading span{font-size:9px;color:#5e7c70}
+#sm3dCinema .s4heading .s4pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#23b17d;box-shadow:0 0 0 4px #23b17d27;margin-right:5px}
+#sm3dCinema .s4stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#sm3dCinema .s4stats>div{border:1px solid #d3e5d8;background:#ffffffc9;border-radius:9px;padding:8px 6px;min-width:0}
+#sm3dCinema .s4stats strong{display:block;font:750 17px/1.2 system-ui;color:#127957}
+#sm3dCinema .s4stats span{display:block;color:#698476;font-size:9px;margin-top:3px}
+#sm3dCinema .s4row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+#sm3dCinema .s4row button{border:1px solid #b4d1bf;background:#fff;color:#225d46;border-radius:8px;font-size:10px;font-weight:650;min-height:32px;padding:7px}
+#sm3dCinema .s4row button:hover{background:#e5f6ec;border-color:#49a378}
+#sm3dCinema button:disabled{opacity:.45;cursor:not-allowed}
+#sm3dCinema .s4row .s4primary{background:#087e5c;color:#fff;border-color:#087e5c}
+#sm3dCinema .s4row .s4primary:hover{background:#075c45}
+#sm3dCinema .s4field{display:flex;flex-direction:column;gap:4px;color:#315d49;font-size:10px;font-weight:700}
+#sm3dCinema select,#sm3dCinema input[type=range]{width:100%;min-width:0;accent-color:#0f8962}
+#sm3dCinema select{padding:7px 8px;border:1px solid #bad4c3;border-radius:8px;background:#fff;color:#234c3a}
+#sm3dCinema .s4field output{font-weight:500;color:#497a62}
+#sm3dCinema .s4check{display:flex;gap:7px;align-items:flex-start;font-size:10px;color:#325e48}
+#sm3dCinema .s4check input{margin-top:2px;accent-color:#0f8962}
+#sm3dCinema .s4status{border-top:1px solid #cee2d2;padding-top:8px;color:#3e7258;font-size:10px;margin:0}
+#sm3dCinema .s4warn{font-size:10px;color:#8b6a34;margin:0}
+#smrealMap .s4-hud{position:absolute;z-index:25;left:12px;bottom:35px;max-width:280px;background:#0c2927dc;color:#e7fff0;border:1px solid #8ae0bc66;border-radius:11px;padding:10px 12px;box-shadow:0 5px 20px #0003;pointer-events:none;font:11px/1.5 system-ui;backdrop-filter:blur(12px)}
+#smrealMap .s4-hud b{font-size:12px;display:block;color:#b9ffd6}
+#smrealMap .s4-hud .s4-hud-sub{color:#9bcbb9;font-size:9px;display:block}
+#smrealMap .s4-hud .s4-hud-track{height:3px;background:#42685d;margin-top:7px;border-radius:5px;overflow:hidden}
+#smrealMap .s4-hud .s4-hud-fill{height:100%;width:0%;background:#40d49c;transition:width .3s}
+#smrealMap .s4-hud[hidden]{display:none}
+body.s4-cinema #smrealSection .smreal-head{background:linear-gradient(120deg,#d7eee0,#f7fbf8)}
+@media(max-width:760px){#sm3dCinema{padding:9px}#smrealMap .s4-hud{left:6px;bottom:25px;max-width:210px;padding:8px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){#smrealMap .s4-hud .s4-hud-fill{transition:none}}

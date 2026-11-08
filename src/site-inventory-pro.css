@@ -1,0 +1,27 @@
+/* Botanical network-data workflow — compact so original dashboards remain intact. */
+.network-data-advisor{margin:12px 0 15px;border:1px solid #b4d7c4;border-radius:14px;background:linear-gradient(120deg,#f5fbf5,#ecf5ee);padding:14px;color:#244e3c;font:12px/1.5 system-ui;box-shadow:0 2px 12px #2549350d}
+.network-data-advisor *{box-sizing:border-box}.network-data-advisor h3{margin:0 0 4px;font-size:17px;letter-spacing:-.02em;color:#16543c}
+.network-data-advisor p{margin:5px 0 9px;color:#4d705b}.network-data-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.network-data-advisor button,.network-data-advisor .network-file-like{display:inline-flex;gap:7px;justify-content:center;align-items:center;border:1px solid #b5d4bf;border-radius:8px;padding:8px 11px;background:white;color:#20684a;font:600 12px system-ui;cursor:pointer}
+.network-data-advisor .primary{background:#087b5c;color:white;border-color:#087b5c}.network-data-advisor button:disabled{opacity:.45;cursor:not-allowed}
+.network-data-badges{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.network-data-badges span{padding:5px 9px;background:white;border:1px solid #d3e5d7;border-radius:9px;font:600 11px system-ui}
+.network-data-note{border-left:3px solid #d0a54f;background:#fffaf0;border-radius:5px;padding:7px 11px;color:#685330;margin:10px 0}
+.network-data-note.ok{border-left-color:#1b9265;background:#eff9f1;color:#215c40}
+.network-site-mapping{border-top:1px solid #c9ddce;margin-top:12px;padding-top:12px}
+.network-site-mapping[hidden]{display:none}.network-data-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:10px 0}
+.network-data-fields label{display:grid;gap:3px;font-size:11px;font-weight:650}.network-data-fields select{border:1px solid #c2d9c8;border-radius:6px;padding:6px;max-width:100%;background:#fff;color:#234934;font:12px system-ui}
+.network-site-preview{border:1px solid #dae6dc;overflow:auto;max-height:160px;border-radius:7px;margin:8px 0;background:#fff}.network-site-preview table{border-collapse:collapse;width:100%;font:11px/1.3 system-ui}.network-site-preview td,.network-site-preview th{padding:6px;border-bottom:1px solid #e4eee5;text-align:left}.network-site-preview th{background:#edf4ee}
+.network-data-advisor label.consent{display:flex;gap:8px;align-items:flex-start;margin:9px 0;color:#365d48}
+.network-operator-quick{display:grid;gap:4px;margin:8px 0;font:600 11px system-ui;color:#2d6046}.network-operator-quick select{border:1px solid #c0d9c8;background:#fff;border-radius:6px;padding:6px;color:#215b41;max-width:200px}
+.network-pro-hint{font:10px/1.45 system-ui;color:#577b62;padding:5px 0}.network-map-operator-key{display:flex;gap:4px;align-items:center}
+@media(max-width:760px){.network-data-advisor{padding:11px}.network-data-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.network-data-toolbar button{min-height:36px}}
+
+/* Source-data validation details: compact until the user chooses to inspect. */
+.network-validation-details{margin:9px 0;border:1px solid #d1e2d5;background:#fff;border-radius:9px;padding:8px 10px}
+.network-validation-details summary{cursor:pointer;font-weight:650;color:#2b664b;list-style-position:inside}
+.network-validation-reason{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eaf1ec;padding:5px 2px}
+.network-validation-reason:last-child{border:0}
+.network-validation-reason strong{font-variant-numeric:tabular-nums}
+.network-validation-details p{overflow-wrap:anywhere;font-size:11px}
+.network-data-advisor button:focus-visible,.network-data-advisor select:focus-visible,.network-validation-details summary:focus-visible{outline:2px solid #168c67;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.network-data-advisor *{scroll-behavior:auto!important;transition:none!important}}

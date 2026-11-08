@@ -1,0 +1,16 @@
+/* Botanical V16: screen-space measurement callouts; never physical towers. */
+.sm-v16-overlay{position:absolute;inset:0;z-index:24;pointer-events:none;overflow:hidden}
+.sm-v16-leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.sm-v16-leaders line{stroke:#367e6d;stroke-width:1.25;stroke-dasharray:3 4;opacity:.66}
+.sm-v16-cell{position:absolute;transform:translate(-50%,0);width:145px;height:42px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;border:1px solid #8ab5a8;border-left:4px solid #668479;border-radius:8px;background:rgba(250,255,251,.95);box-shadow:0 4px 15px rgba(13,54,40,.21);padding:5px 8px;color:#194b36;font:11px/1.2 system-ui,sans-serif;text-align:left;pointer-events:auto;cursor:pointer;white-space:normal;max-width:none}
+.sm-v16-cell strong{font-weight:700;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.sm-v16-cell span{color:#4a665b;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.sm-v16-cell[data-quality=weak]{border-left-color:#c95748}
+.sm-v16-cell[data-quality=good]{border-left-color:#dfa537}
+.sm-v16-cell[data-quality=excellent]{border-left-color:#119d70}
+.sm-v16-cell.selected{outline:3px solid #e9b64b;z-index:2}
+.sm-v16-cell:focus-visible{outline:3px solid #1a9d78;outline-offset:2px}
+/* Network's original overlap label remains available if V16 is inactive. */
+.sm-v16-observations-active .network-tower-label.network-observed-label{display:none!important}
+@media(max-width:650px){.sm-v16-cell{width:118px;height:40px;padding:4px 5px;font-size:10px}.sm-v16-cell strong{font-size:10px}.sm-v16-cell span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.sm-v16-cell{transition:none}}
